@@ -453,7 +453,7 @@ export default function App() {
               {/* Accompanying info card */}
               <div className="bg-white p-6 rounded-xl border border-muted-slate/10 mt-6 hidden lg:block">
                 <Quote className="w-8 h-8 text-antique-bronze/20 mb-3" />
-                <p className="text-xs text-muted-slate leading-relaxed font-serif italic">
+                <p className="text-base md:text-lg text-muted-slate leading-relaxed font-serif italic">
                   {lang === "tr" ? (
                     "\"Eğitim sadece bilgi aktarımı değil, öğrencinin potansiyeline giden kapıyı aralamaktır. Doğru sınav stratejileri ile her hedef dilde başarı mümkündür.\""
                   ) : (
