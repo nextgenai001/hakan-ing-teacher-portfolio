@@ -1,0 +1,6 @@
+{
+  "name": "Hakan Behzadi Portfolio",
+  "description": "Sleek and responsive bilingual (Turkish & English) portfolio web application for Hakan Behzadi, English Teacher, designed in an Ivy League Editorial theme.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
