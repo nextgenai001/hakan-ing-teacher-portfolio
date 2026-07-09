@@ -51,4 +51,4 @@ jobs:
           virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
           project-name: hakan-portfolio
           docker-compose-path: docker-compose.yml
-          personal-access-token: ${{ secrets.GH_PAT }}
+          personal-token: ${{ secrets.GH_PAT }}
