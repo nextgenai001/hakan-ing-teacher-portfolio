@@ -33,13 +33,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
 
-  // Profile Picture State with localStorage persistence
-  const defaultProfilePic = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80";
-  const [profilePic, setProfilePic] = useState<string>(() => {
-    return localStorage.getItem("hakan_profile_pic") || defaultProfilePic;
-  });
-  const [isPicModalOpen, setIsPicModalOpen] = useState(false);
-  const [tempPicUrl, setTempPicUrl] = useState(profilePic);
+  const profilePic = "/profile-picture.png";
 
   // Testimonials State with localStorage persistence for new reviews
   const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
@@ -97,20 +91,6 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleProfilePicSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    const url = tempPicUrl.trim() || defaultProfilePic;
-    setProfilePic(url);
-    localStorage.setItem("hakan_profile_pic", url);
-    setIsPicModalOpen(false);
-  };
-
-  const handleResetProfilePic = () => {
-    setProfilePic(defaultProfilePic);
-    setTempPicUrl(defaultProfilePic);
-    localStorage.removeItem("hakan_profile_pic");
-    setIsPicModalOpen(false);
-  };
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -416,43 +396,15 @@ export default function App() {
                   src={profilePic}
                   alt={portfolioData.name}
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover grayscale-[15%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover object-[center_30%] grayscale-[15%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                   onError={(e) => {
-                    // Fallback if user pastes broken URL
-                    e.currentTarget.src = defaultProfilePic;
+                    // Fallback if image fails to load
+                    e.currentTarget.src = profilePic;
                   }}
                 />
-
-                {/* Edit Button Overlay */}
-                <button
-                  onClick={() => {
-                    setTempPicUrl(profilePic);
-                    setIsPicModalOpen(true);
-                  }}
-                  className="absolute bottom-4 right-4 bg-white/90 backdrop-blur hover:bg-antique-bronze hover:text-white text-oxford-navy p-3 rounded-xl shadow-lg border border-muted-slate/10 transition-all duration-300 flex items-center space-x-1.5 text-xs font-medium cursor-pointer"
-                  title="Change Profile Picture"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                  <span className="font-mono text-[10px] uppercase font-bold">
-                    {lang === "tr" ? "Görseli Değiştir" : "Change Pic"}
-                  </span>
-                </button>
-
-                {/* Active Indicator Badge */}
-                <div className="absolute top-4 left-4 bg-emerald-500/90 backdrop-blur text-white px-3 py-1 rounded-full text-[9px] font-mono tracking-wider uppercase font-bold flex items-center space-x-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                  <span>{lang === "tr" ? "AKTİF" : "ACTIVE"}</span>
-                </div>
               </div>
 
-              {/* Inline helper for user */}
-              <div className="mt-6 text-center text-xs text-muted-slate font-mono italic max-w-[320px]">
-                {lang === "tr" ? (
-                  "* Görseli Değiştir butonuna tıklayarak kendi profil resmi URL'nizi yapıştırabilirsiniz."
-                ) : (
-                  "* Click Change Pic to paste your own custom profile image link."
-                )}
-              </div>
+
 
             </div>
           </div>
@@ -1165,90 +1117,7 @@ export default function App() {
         </span>
       </a>
 
-      {/* MODAL 1: EDIT PROFILE PICTURE */}
-      <AnimatePresence>
-        {isPicModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center px-6">
-            
-            {/* Backdrop layer */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsPicModalOpen(false)}
-              className="absolute inset-0 bg-oxford-navy/80 backdrop-blur-sm"
-            />
 
-            {/* Modal Box */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-primary-bg w-full max-w-md p-6 sm:p-8 rounded-2xl border border-antique-bronze/35 shadow-2xl relative z-10"
-            >
-              
-              {/* Close Button */}
-              <button
-                onClick={() => setIsPicModalOpen(false)}
-                className="absolute top-4 right-4 text-oxford-navy/55 hover:text-oxford-navy"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center space-x-3 mb-4">
-                <ImageIcon className="w-5 h-5 text-antique-bronze" />
-                <h3 className="font-serif text-lg font-bold text-oxford-navy">
-                  {lang === "tr" ? "Profil Resmi Ayarları" : "Profile Picture Settings"}
-                </h3>
-              </div>
-
-              <p className="text-xs text-muted-slate mb-6">
-                {lang === "tr" ? (
-                  "Web sitenizde görünmesini istediğiniz profil resminin doğrudan bağlantı adresini (URL) girin. Bu ayar tarayıcınıza kaydedilecektir."
-                ) : (
-                  "Provide a direct image address (URL) of your profile portrait. This setting will persist in your local browser."
-                )}
-              </p>
-
-              <form onSubmit={handleProfilePicSave} className="space-y-4">
-                
-                <div className="flex flex-col space-y-1.5">
-                  <label htmlFor="picUrl" className="font-mono text-[10px] uppercase font-bold text-muted-slate">
-                    {lang === "tr" ? "Resim Bağlantı Adresi (URL)" : "Image Link Address (URL)"}
-                  </label>
-                  <input
-                    type="url"
-                    id="picUrl"
-                    required
-                    placeholder="e.g., https://domain.com/hakan.jpg"
-                    value={tempPicUrl}
-                    onChange={(e) => setTempPicUrl(e.target.value)}
-                    className="w-full px-4 py-2.5 text-xs bg-white border border-muted-slate/20 rounded-xl focus:border-antique-bronze focus:ring-1 focus:ring-antique-bronze outline-none text-oxford-navy transition-all font-mono"
-                  />
-                </div>
-
-                <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto flex-1 bg-antique-bronze hover:bg-oxford-navy text-white text-xs font-mono tracking-widest uppercase py-3 rounded-xl transition-all text-center cursor-pointer"
-                  >
-                    {lang === "tr" ? "Kaydet ve Uygula" : "Save & Apply"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleResetProfilePic}
-                    className="w-full sm:w-auto border border-oxford-navy/20 hover:bg-red-50 hover:text-red-600 text-oxford-navy text-xs font-mono tracking-widest uppercase py-3 px-4 rounded-xl transition-all text-center cursor-pointer"
-                  >
-                    {lang === "tr" ? "Varsayılana Dön" : "Reset Default"}
-                  </button>
-                </div>
-
-              </form>
-
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* MODAL 2: WRITE A REVIEW */}
       <AnimatePresence>
