@@ -43,12 +43,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Deploy to Hostinger
-        uses: hostinger/deploy-on-vps@v1
-        with:
-          api-key: ${{ secrets.HOSTINGER_API_KEY }}
-          virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
-          project-name: hakan-portfolio
-          docker-compose-path: docker-compose.yml
-          personal-token: ${{ secrets.GH_PAT }}
