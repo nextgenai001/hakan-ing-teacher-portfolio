@@ -1,28 +1,28 @@
 # Build Stage
 FROM node:20-alpine AS builder
 WORKDIR /app
-
-# Copy package manifests and lockfile
 COPY package*.json ./
-
-# Install dependencies cleanly
 RUN npm ci
-
-# Copy the rest of the application files
 COPY . .
-
-# Build the production assets
 RUN npm run build
 
 # Production Stage
-FROM nginx:1.25-alpine AS runner
+FROM node:20-alpine AS runner
+WORKDIR /app
+COPY package*.json ./
 
-# Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Install only production dependencies
+RUN npm ci --only=production
 
-# Copy build output from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy built frontend assets
+COPY --from=builder /app/dist ./dist
 
-EXPOSE 80
+# Copy the Express server file
+COPY server.js ./
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+CMD ["node", "server.js"]
