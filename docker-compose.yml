@@ -1,12 +1,7 @@
 services:
   web:
-    image: ghcr.io/nextgenai001/hakan-ing-teacher-portfolio:lates
+    image: ghcr.io/nextgenai001/hakan-ing-teacher-portfolio:latest
     container_name: hakan-portfolio
     restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      # Route requests for hakan-eng.nexoden.ai to this container
-      - "traefik.http.routers.hakan-portfolio.rule=Host(`hakan-eng.nexoden.ai`)"
-      - "traefik.http.routers.hakan-portfolio.entrypoints=websecure"
-      - "traefik.http.routers.hakan-portfolio.tls.certresolver=letsencrypt"
-      - "traefik.http.services.hakan-portfolio.loadbalancer.server.port=3000"
+    ports:
+      - "3000:3000"
