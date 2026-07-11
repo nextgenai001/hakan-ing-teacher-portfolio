@@ -91,6 +91,12 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Dynamic Document Title based on language
+  useEffect(() => {
+    document.title = lang === "tr" 
+      ? "Hakan Behzadi - İngilizce Öğretmeni" 
+      : "Hakan Behzadi - English Teacher";
+  }, [lang]);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
