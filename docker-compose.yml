@@ -1,7 +1,7 @@
 services:
   web:
-    image: ghcr.io/nextgenai001/hakan-ing-teacher-portfolio:latest
     container_name: hakan-portfolio
+    image: ghcr.io/nextgenai001/hakan-ing-teacher-portfolio:latest
     restart: unless-stopped
     ports:
       - "3000:3000"
